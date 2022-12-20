@@ -13,7 +13,7 @@ using namespace std;
 
 class User {
 private:
-    string userName;
+    string username;
     string password;
     string mail;
     list<Note> notes;
@@ -21,8 +21,8 @@ private:
 public:
     User();
     User(string, string, string);
-    string getUserName();
-    string getPassWord();
+    string getUsername();
+    string getPassword();
     string getMail();
     list<Note> getNotes();
     void addNote(Note);

@@ -7,17 +7,17 @@
 
 User::User() {}
 
-User::User(string userName, string password, string mail) {
-    this->userName = userName;
+User::User(string username, string password, string mail) {
+    this->username = username;
     this->password = password;
     this->mail = mail;
 }
 
-string User::getUserName() {
-    return userName;
+string User::getUsername() {
+    return username;
 }
 
-string User::getPassWord() {
+string User::getPassword() {
     return password;
 }
 
