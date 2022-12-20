@@ -10,7 +10,7 @@ User currentUser;
 list<User> userList;
 
 // MAIN
-void info();
+void infoLoginPage();
 
 void initUser();
 void setCurrentUser(User);
@@ -33,6 +33,7 @@ void userAlreadyExistsMessage();
 // WELCOME PANEL
 void createNoteList();
 void createNewNote(string, string);
+void infoNoteEditorPage();
 
 int main() {
     initUser();
@@ -42,7 +43,7 @@ int main() {
     string password;
 
     cout << "Welcome to MyNotes Console Edition" << endl;
-    info();
+    infoLoginPage();
 
     while(!exit) {
         int uiChoice = 0;
@@ -65,8 +66,10 @@ int main() {
                     createNoteList();
                 } else {
                     showUserDoesNotExistMessage();
-                    info();
+                    infoLoginPage();
                 }
+            } else {
+                showEmptyUserInfoMessage();
             }
         } else if (uiChoice == 2) {
             string mail;
@@ -79,11 +82,16 @@ int main() {
             cout << "Enter mail: ";
             cin >> mail;
 
-            User user(username, password, mail);
-
-            // TODO: -> Registration Panel Methods
-
-            registerUser(user);
+            if (!username.empty() && !password.empty() && !mail.empty()) {
+                if (checkIfUserAlreadyRegistered(username, mail)) {
+                    userAlreadyExistsMessage();
+                } else {
+                    User user(username, password, mail);
+                    registerUser(user);
+                }
+            } else {
+                emptyUserInfoMessage();
+            }
         } else if (uiChoice == -1) {
             exit = true;
         } else {
@@ -96,13 +104,24 @@ int main() {
     return 0;
 }
 
-void info() {
+void infoLoginPage() {
     cout << "########################" << endl;
     cout << "## ---- COMMANDS ---- ##" << endl;
     cout << "## Login ---------> 1 ##" << endl;
     cout << "## Registration --> 2 ##" << endl;
     cout << "## Exit ---------> -1 ##" << endl;
     cout << "########################" << endl;
+}
+
+void infoNoteEditorPage() {
+    cout << "############################" << endl;
+    cout << "## ------ COMMANDS ------ ##" << endl;
+    cout << "## View Notes --------> 1 ##" << endl;
+    cout << "## Create New Note ---> 2 ##" << endl;
+    cout << "## Logout -----------> -1 ##" << endl;
+    cout << "############################" << endl;
+
+    cout << "Enter a number to proceed: ";
 }
 
 // MAIN
@@ -211,14 +230,8 @@ void createNoteList() {
     while(loggedIn) {
         int uiChoice = 0;
 
-        cout << "############################" << endl;
-        cout << "## ------ COMMANDS ------ ##" << endl;
-        cout << "## View Notes --------> 1 ##" << endl;
-        cout << "## Create New Note ---> 2 ##" << endl;
-        cout << "## Logout -----------> -1 ##" << endl;
-        cout << "############################" << endl;
+        infoNoteEditorPage();
 
-        cout << "Enter a number to proceed: ";
         cin >> uiChoice;
 
         if (uiChoice == 1) {
@@ -255,6 +268,9 @@ void createNoteList() {
         } else if (uiChoice == -1) {
             loggedIn = false;
             logout();
+        } else {
+            cout << "Invalid number entered." << endl;
+            break;
         }
     }
 
