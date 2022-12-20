@@ -32,10 +32,7 @@ void userAlreadyExistsMessage();
 
 // WELCOME PANEL
 void createNoteList();
-void viewNote(Note);
-void createNewNote();
-void backToWelcomePage();
-void saveNote();
+void createNewNote(string, string);
 
 int main() {
     initUser();
@@ -43,12 +40,14 @@ int main() {
 
     string username;
     string password;
-    int uiChoice = 0;
 
     cout << "Welcome to MyNotes Console Edition" << endl;
     info();
 
     while(!exit) {
+        int uiChoice = 0;
+
+        cout << "Enter a number to proceed: ";
         cin >> uiChoice;
 
         if (uiChoice == 1) {
@@ -87,6 +86,10 @@ int main() {
             registerUser(user);
         } else if (uiChoice == -1) {
             exit = true;
+        } else {
+            // TODO: got back to menu choice
+            cout << "Invalid number entered. Application will terminate." << endl;
+            break;
         }
     }
 
@@ -203,23 +206,61 @@ void userAlreadyExistsMessage() {
 
 // WELCOME PANEL
 void createNoteList() {
-    int i = 1;
+    bool loggedIn = true;
 
-    for (Note n : currentUser.getNotes()) {
-        cout << "[" << i << "] " << n.getNote() << endl;
-        i++;
+    while(loggedIn) {
+        int uiChoice = 0;
+
+        cout << "############################" << endl;
+        cout << "## ------ COMMANDS ------ ##" << endl;
+        cout << "## View Notes --------> 1 ##" << endl;
+        cout << "## Create New Note ---> 2 ##" << endl;
+        cout << "## Logout -----------> -1 ##" << endl;
+        cout << "############################" << endl;
+
+        cout << "Enter a number to proceed: ";
+        cin >> uiChoice;
+
+        if (uiChoice == 1) {
+            int i = 1;
+
+            for (Note n: currentUser.getNotes()) {
+                cout << "[" << i << "] " << n.getNote() << endl;
+                i++;
+            }
+
+            cout << "Enter the number of the note to view" << endl;
+
+            int choice;
+            cin >> choice;
+            choice--;
+
+            cout << "Title: " << currentUser.getNotes()[choice].getTitle() << endl;
+            cout << "Note:\n" << currentUser.getNotes()[choice].getNote() << endl;
+
+            cout << "## END View Note ##" << endl;
+        } else if (uiChoice == 2) {
+            string title;
+            string content;
+
+            cout << "Enter new note title: ";
+            cin >> title;
+
+            cout << "Enter note content: " << endl;
+            cin >> content;
+
+            createNewNote(title, content);
+
+            cout << "Created new note succesfully" << endl;
+        } else if (uiChoice == -1) {
+            loggedIn = false;
+            logout();
+        }
     }
 
-    // TODO: view note
-
-    cout << "Enter the number of the note to view" << endl;
-
-    int choice;
-    cin >> choice;
-
 }
-// Note viewNote(index of notelist);
-void viewNote(Note);
-void createNewNote();
-void backToWelcomePage();
-void saveNote();
+
+void createNewNote(string title, string content) {
+    Note note(title, content);
+    currentUser.addNote(note);
+}

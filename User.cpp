@@ -25,7 +25,7 @@ string User::getMail() {
     return mail;
 }
 
-list<Note> User::getNotes() {
+vector<Note> User::getNotes() {
     return notes;
 }
 

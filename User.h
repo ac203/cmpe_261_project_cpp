@@ -7,6 +7,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include "Note.h"
 
 using namespace std;
@@ -16,7 +17,7 @@ private:
     string username;
     string password;
     string mail;
-    list<Note> notes;
+    vector<Note> notes;
 
 public:
     User();
@@ -24,7 +25,7 @@ public:
     string getUsername();
     string getPassword();
     string getMail();
-    list<Note> getNotes();
+    vector<Note> getNotes();
     void addNote(Note);
 //    void updateNotes();
 //    void deleteNote(Note);
