@@ -5,9 +5,11 @@ using namespace std;
 #include "User.h"
 #include "Note.h"
 
-User currentUser();
+User currentUser;
+list<User> userList;
 
 // MAIN
+void initUser();
 void setCurrentUser(User);
 User getCurrentUser();
 User getUserFromList(string, string);
@@ -34,6 +36,8 @@ void saveNote();
 
 
 int main() {
+    initUser();
+
     string username;
     string password;
     int uiChoice = 0;
@@ -62,4 +66,27 @@ int main() {
     }
 
     return 0;
+}
+
+void initUser() {
+    User testUser("testuser", "1234", "abc@mail.com");
+    User testUser2("aa", "aa", "aa");
+
+    Note note1("Note 1", "This is the first note.");
+    Note note2("Note 2", "This is the second note.");
+    Note note3("Note 3", "This is the third note.");
+    Note note4("Note 4", "This is the 4th note.");
+    Note note5("Note FIVE", "Note number five.");
+    Note note6("6th Note", "Note number six.");
+
+    testUser.addNote(note1);
+    testUser.addNote(note2);
+    testUser.addNote(note3);
+
+    testUser2.addNote(note4);
+    testUser2.addNote(note5);
+    testUser2.addNote(note6);
+
+    userList.push_back(testUser);
+    userList.push_back(testUser2);
 }
