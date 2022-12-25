@@ -257,7 +257,7 @@ void createNoteList() {
                 i++;
             }
 
-            cout << "Enter the number of the note to view" << endl;
+            cout << "Enter the number of the note to view: ";
 
             // choice = index number of the note the user wants to view
             int choice;
