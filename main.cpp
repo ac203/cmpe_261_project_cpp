@@ -5,40 +5,46 @@ using namespace std;
 #include "User.h"
 #include "Note.h"
 
-User loggedOfUser;
+// default user when no user is logged in
+User loggedOutUser;
+// current logged in user is saved in this variable, default is loggedOutUser
 User currentUser;
+// list of registrated users
 list<User> userList;
 
-// MAIN
+// MAIN PAGE FUNCTIONS
 void infoLoginPage();
-
 void initUser();
 void setCurrentUser(User);
 User getCurrentUser();
 User getUserFromList(string, string);
 void logout();
 
-// LOGIN PANEL
+// LOGIN PAGE FUNCTIONS
 bool checkIfUserExists(string, string);
 void login(string, string);
 void showUserDoesNotExistMessage();
 void showEmptyUserInfoMessage();
 
-// REGISTRATION PANEL
+// REGISTRATION PAGE FUNCTIONS
 bool checkIfUserAlreadyRegistered(string, string);
 void registerUser(User);
 void emptyUserInfoMessage();
 void userAlreadyExistsMessage();
 
-// WELCOME PANEL
+// WELCOME PAGE FUNCTIONS
 void createNoteList();
 void createNewNote(string, string);
 void infoNoteEditorPage();
 
 int main() {
+    // initalize default users and notes
     initUser();
+
+    // flag for exiting the programm, default false
     bool exit = false;
 
+    // user input is saved in these variables
     string username;
     string password;
 
@@ -46,6 +52,7 @@ int main() {
     infoLoginPage();
 
     while(!exit) {
+        // flag for the ui
         int uiChoice = 0;
 
         cout << "Enter a number to proceed: ";
@@ -105,27 +112,28 @@ int main() {
 }
 
 void infoLoginPage() {
-    cout << "########################" << endl;
-    cout << "## ---- COMMANDS ---- ##" << endl;
-    cout << "## Login ---------> 1 ##" << endl;
-    cout << "## Registration --> 2 ##" << endl;
-    cout << "## Exit ---------> -1 ##" << endl;
-    cout << "########################" << endl;
+    cout << "##########################" << endl;
+    cout << "## WELCOMEPAGE COMMANDS ##" << endl;
+    cout << "##  1 --> Login ------- ##" << endl;
+    cout << "##  2 --> Registration  ##" << endl;
+    cout << "## -1 --> Exit -------- ##" << endl;
+    cout << "##########################" << endl;
 }
 
 void infoNoteEditorPage() {
     cout << "############################" << endl;
-    cout << "## ------ COMMANDS ------ ##" << endl;
-    cout << "## View Notes --------> 1 ##" << endl;
-    cout << "## Create New Note ---> 2 ##" << endl;
-    cout << "## Logout -----------> -1 ##" << endl;
+    cout << "### NOTE EDITOR COMMANDS ###" << endl;
+    cout << "##  1 --> View Notes -----##" << endl;
+    cout << "##  2 --> Create New Note ##" << endl;
+    cout << "## -1 --> Logout ---------##" << endl;
     cout << "############################" << endl;
 
     cout << "Enter a number to proceed: ";
 }
 
-// MAIN
+// MAIN PAGE FUNCTIONS
 void initUser() {
+    // 2 testuser with notes are initialized
     User testUser("testuser", "1234", "abc@mail.com");
     User testUser2("aa", "aa", "aa");
 
@@ -144,6 +152,7 @@ void initUser() {
     testUser2.addNote(note5);
     testUser2.addNote(note6);
 
+    // put testusers in the list of registrated users
     userList.push_back(testUser);
     userList.push_back(testUser2);
 }
@@ -158,7 +167,6 @@ User getCurrentUser() {
 
 User getUserFromList(string username, string password) {
     // get registered user from user list
-
     User user;
     for (User u : userList) {
         if (u.getUsername() == username && u.getPassword() == password) {
@@ -169,11 +177,11 @@ User getUserFromList(string username, string password) {
 }
 
 void logout() {
-    setCurrentUser(loggedOfUser);
+    setCurrentUser(loggedOutUser);
 }
 
 
-// LOGIN PANEL
+// LOGIN PAGE FUNCTIONS
 bool checkIfUserExists(string username, string password) {
     // iterate through list of users and return true if user exists
     for (User u : userList) {
@@ -199,7 +207,7 @@ void showEmptyUserInfoMessage() {
 }
 
 
-// REGISTRATION PANEL
+// REGISTRATION PAGE FUNCTIONS
 bool checkIfUserAlreadyRegistered(string username, string mail) {
     // iterate through list of users and return true if user is already registered
     for (User u : userList) {
@@ -225,27 +233,36 @@ void userAlreadyExistsMessage() {
 
 // WELCOME PANEL
 void createNoteList() {
+    // this function "renders" the notes of the user as long as the user is logged in
+
+    // logged in flag
     bool loggedIn = true;
 
+    // while logged in the user sees all the notes
     while(loggedIn) {
+
+        // flag for ui
         int uiChoice = 0;
 
         infoNoteEditorPage();
 
         cin >> uiChoice;
 
+        // list the notes of the user
         if (uiChoice == 1) {
             int i = 1;
 
             for (Note n: currentUser.getNotes()) {
-                cout << "[" << i << "] " << n.getNote() << endl;
+                cout << "[" << i << "] " << n.getTitle() << endl;
                 i++;
             }
 
             cout << "Enter the number of the note to view" << endl;
 
+            // choice = index number of the note the user wants to view
             int choice;
             cin >> choice;
+            // decreasing the number because of 0 indexing
             choice--;
 
             cout << "Title: " << currentUser.getNotes()[choice].getTitle() << endl;
@@ -253,6 +270,7 @@ void createNoteList() {
 
             cout << "## END View Note ##" << endl;
         } else if (uiChoice == 2) {
+            // create new note
             string title;
             string content;
 
@@ -266,6 +284,7 @@ void createNoteList() {
 
             cout << "Created new note succesfully" << endl;
         } else if (uiChoice == -1) {
+            // log out
             loggedIn = false;
             logout();
         } else {
@@ -277,6 +296,7 @@ void createNoteList() {
 }
 
 void createNewNote(string title, string content) {
+    // new note gets created and added to current users note list
     Note note(title, content);
     currentUser.addNote(note);
 }
